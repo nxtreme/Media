@@ -22,17 +22,22 @@
     </style>
     <script>
         function includeMedia(mediaId) {
+            $('#{{ sprintf("media__%s__id", $zone) }}').val(mediaId);
+            $('#{{ sprintf("media__%s__entity_class", $zone) }}').val('{{ $entityClass }}');
+            $('#{{ sprintf("media__%s__entity_id", $zone) }}').val('{{ isset($entityId) ? $entityId : null }}');
+
             $.ajax({
                 type: 'POST',
-                url: '{{ route('api.media.link') }}',
+                url: '{{ route('api.media.thumbnail_path') }}',
                 data: {
                     'mediaId': mediaId,
                     '_token': '{{ csrf_token() }}',
                     'entityClass': '{{ $entityClass }}',
-                    'entityId': '{{ $entityId }}',
+                    'entityId': '{{ isset($entityId) ? $entityId : null }}',
                     'zone': '{{ $zone }}'
                 },
                 success: function(data) {
+                    $('#{{ sprintf("media__%s__path", $zone) }}').val(data.result.path);
                     var html = '<img src="' + data.result.path + '" alt=""/>' +
                             '<a class="jsRemoveLink" href="#" data-id="' + data.result.imageableId + '">' +
                                 '<i class="fa fa-times-circle"></i>' +
@@ -49,6 +54,11 @@
     <a class="btn btn-primary" onclick="window.open('{!! $url !!}', '_blank', 'menubar=no,status=no,toolbar=no,scrollbars=yes,height=500,width=1000');"><i class="fa fa-upload"></i>
         {{ trans('media::media.Browse') }}
     </a>
+
+    {!! Form::hidden(sprintf('media[%s][id]', $zone), null, ['id' => sprintf('media__%s__id', $zone)]) !!}
+    {!! Form::hidden(sprintf('media[%s][entity_class]', $zone), null, ['id' => sprintf('media__%s__entity_class', $zone)]) !!}
+    {!! Form::hidden(sprintf('media[%s][entity_id]', $zone), null, ['id' => sprintf('media__%s__entity_id', $zone)]) !!}
+    {!! Form::hidden(sprintf('media[%s][path]', $zone), null, ['id' => sprintf('media__%s__path', $zone)]) !!}
 
     <div class="clearfix"></div>
 
