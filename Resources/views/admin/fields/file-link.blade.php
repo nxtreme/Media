@@ -1,4 +1,4 @@
-<div class="form-group">
+<div class="form-group" data-image-zone="{{ $zone }}">
     <style>
         figure.jsThumbnailImageWrapper {
             position: relative;
@@ -21,7 +21,7 @@
         }
     </style>
     <script>
-        function includeMedia(mediaId) {
+        function {{ $zone }}_includeMedia(mediaId) {
             $.ajax({
                 type: 'POST',
                 url: '{{ route('api.media.link') }}',
@@ -37,7 +37,7 @@
                             '<a class="jsRemoveLink" href="#" data-id="' + data.result.imageableId + '">' +
                                 '<i class="fa fa-times-circle"></i>' +
                             '</a>';
-                    $('.jsThumbnailImageWrapper').append(html).fadeIn();
+                    $('[data-image-zone="{{ $zone }}"] .jsThumbnailImageWrapper').append(html).fadeIn();
                 }
             });
         }
@@ -45,7 +45,7 @@
     {!! Form::label($zone, ucfirst($zone) . ':') !!}
     <div class="clearfix"></div>
 
-    <?php $url = route('media.grid.select') ?>
+    <?php $url = route('media.grid.select', ['zone' => $zone]) ?>
     <a class="btn btn-primary" onclick="window.open('{!! $url !!}', '_blank', 'menubar=no,status=no,toolbar=no,scrollbars=yes,height=500,width=1000');"><i class="fa fa-upload"></i>
         {{ trans('media::media.Browse') }}
     </a>
@@ -53,9 +53,10 @@
     <div class="clearfix"></div>
 
     <figure class="jsThumbnailImageWrapper">
+        <!-- <?php $zone ?> -->
         <?php if (isset(${$zone}->path)): ?>
             <img src="{{ Imagy::getThumbnail(${$zone}->path, 'mediumThumb') }}" alt=""/>
-            <a class="jsRemoveLink" href="#" data-id="{{ ${$zone}->pivot->id }}">
+            <a class="jsRemoveLink" href="#" data-id="{{ ${$zone}->pivot->id }}" data-image-zone="{{$zone}}">
                 <i class="fa fa-times-circle"></i>
             </a>
         <?php endif; ?>
@@ -63,9 +64,10 @@
 </div>
 <script>
     $( document ).ready(function() {
-        $('.jsRemoveLink').on('click', function(e) {
+        $('[data-image-zone="{{$zone}}"]').on('click',  '.jsRemoveLink', function(e) {
             e.preventDefault();
             var imageableId = $(this).data('id');
+            var me = this;
             $.ajax({
                 type: 'POST',
                 url: '{{ route('api.media.unlink') }}',
@@ -75,9 +77,9 @@
                 },
                 success: function(data) {
                     if (data.error === false) {
-                        $('.jsThumbnailImageWrapper').fadeOut().html('');
+                        $(me).parents('.jsThumbnailImageWrapper').fadeOut().html('');
                     } else {
-                        $('.jsThumbnailImageWrapper').append(data.message);
+                        $(me).parents('.jsThumbnailImageWrapper').append(data.message);
                     }
                 }
             });

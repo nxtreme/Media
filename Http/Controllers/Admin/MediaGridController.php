@@ -3,6 +3,7 @@
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Media\Image\ThumbnailsManager;
 use Modules\Media\Repositories\FileRepository;
+use Illuminate\Http\Request;
 
 class MediaGridController extends AdminBaseController
 {
@@ -27,12 +28,13 @@ class MediaGridController extends AdminBaseController
      * A grid view for the upload button
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $files = $this->file->all();
         $thumbnails = $this->thumbnailsManager->all();
+        $zone = $request->input('zone');
 
-        return view('media::admin.grid.general', compact('files', 'thumbnails'));
+        return view('media::admin.grid.general', compact('files', 'thumbnails', 'zone'));
     }
 
     /**
