@@ -1,6 +1,6 @@
 <div class="form-group" data-image-zone="{{ $zone }}">
     <style>
-        figure.jsThumbnailImageWrapper {
+        figure.jsThumbnailImageWrapper:not([hidden]) {
             position: relative;
             display: inline-block;
             background-color: #fff;
