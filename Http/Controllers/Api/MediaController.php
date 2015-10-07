@@ -60,6 +60,24 @@ class MediaController extends Controller
     }
 
     /**
+     * Get the thumbnail path of a piece of media
+     *
+     * @param Request $request
+     */
+    public function getThumbnailPath(Request $request)
+    {
+        $mediaId = $request->get('mediaId');
+
+        $file = DB::table('media__files')->whereId($mediaId)->first();
+        $thumbnailPath = $this->imagy->getThumbnail($file->path, 'mediumThumb');
+
+        return Response::json([
+            'error' => false,
+            'result' => ['path' => $thumbnailPath]
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      * @param  UploadMediaRequest $request
      * @return Response
