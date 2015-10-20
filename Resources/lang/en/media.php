@@ -15,7 +15,7 @@ return [
     ],
     'form' => [
         'alt_attribute' => 'Alt attribute',
-        'description' => 'Description',
+        'description' => 'Credit Line',
         'keywords' => 'Keywords',
     ],
     'validation' => [
