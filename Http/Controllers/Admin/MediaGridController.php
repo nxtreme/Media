@@ -41,9 +41,14 @@ class MediaGridController extends AdminBaseController
      * A grid view of uploaded files used for the wysiwyg editor
      * @return \Illuminate\View\View
      */
-    public function ckIndex()
+    public function ckIndex(Request $request)
     {
-        $files = $this->file->all();
+        if ($request->has('fileType')) {
+            $files = $this->file->where('mimetype', 'LIKE', $request->get('fileType').'%')->get();
+        } else {
+            $files = $this->file->all();
+        }
+
         $thumbnails = $this->thumbnailsManager->all();
 
         return view('media::admin.grid.ckeditor', compact('files', 'thumbnails'));

@@ -9,6 +9,28 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class EloquentFileRepository extends EloquentBaseRepository implements FileRepository
 {
+
+    /**
+     * If a method does not exist on the repository
+     * try it directly on the model.
+     * THis is mostly because I need the where() method
+     *
+     * @param  string $method
+     * @param  array $args
+     *
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+        // try call the method locally first
+        if (method_exists($this, $method)) {
+            return $this->$method(expand($args));
+        }
+
+        // then try calling the method on the model
+        return call_user_func_array([$this->model, $method], $args);
+    }
+
     /**
      * Update a resource
      * @param  File  $file

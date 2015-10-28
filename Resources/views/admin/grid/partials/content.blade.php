@@ -56,11 +56,12 @@
                         <tr>
                             <td>{{ $file->id }}</td>
                             <td>
-                                <img src="{{ Imagy::getThumbnail($file->path, 'smallThumb') }}" alt=""/>
+                                @if ($file->isImage)<img src="{{ Imagy::getThumbnail($file->path, 'smallThumb') }}" alt=""/>@endif
                             </td>
                             <td>{{ $file->filename }}</td>
                             <td>
                                 <div class="btn-group">
+                                    @if ($file->isImage)
                                     <button type="button" class="btn btn-primary btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         {{ trans('media::media.insert') }} <span class="caret"></span>
                                     </button>
@@ -76,6 +77,11 @@
                                             <a href="">Original</a>
                                         </li>
                                     </ul>
+                                    @else
+                                        <button type="button" class="btn btn-primary btn-flat jsInsertImage" data-file="{{ rtrim(env('ASSET_DOMAIN'), '/') . $file->path }}" data-id="{{ $file->id }}">
+                                            {{ trans('media::media.insert') }}
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
