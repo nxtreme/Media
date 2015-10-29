@@ -78,7 +78,7 @@
                                         </li>
                                     </ul>
                                     @else
-                                        <button type="button" class="btn btn-primary btn-flat jsInsertImage" data-file="{{ rtrim(env('ASSET_DOMAIN'), '/') . $file->path }}" data-id="{{ $file->id }}">
+                                        <button type="button" class="btn btn-primary btn-flat jsInsertImage" data-file="{{ $file->path }}" data-id="{{ $file->id }}">
                                             {{ trans('media::media.insert') }}
                                         </button>
                                     @endif
