@@ -124,12 +124,40 @@ class MediaController extends Controller
 
     /**
      * Remove the record in the media__imageables table for the given id
+     *
      * @param Request $request
      */
     public function unlinkMedia(Request $request)
     {
         $imageableId = $request->get('imageableId');
         $deleted = DB::table('media__imageables')->whereId($imageableId)->delete();
+        if (! $deleted) {
+            return Response::json(['error' => true, 'message' => 'The file was not found.']);
+        }
+
+        event(new FileWasUnlinked($imageableId));
+
+        return Response::json(['error' => false, 'message' => 'The link has been removed.']);
+    }
+
+    /**
+     * Remove the record in the media__imageables table for the given
+     * imageable id, specific file id and zone.
+     *
+     * @param Request $request
+     */
+    public function unlinkMediaMulti(Request $request)
+    {
+        $imageableId = $request->get('imageableId');
+        $fileId = $request->get('fileId');
+        $zone = $request->get('zone');
+
+        $deleted = DB::table('media__imageables')
+            ->whereImageableId($imageableId)
+            ->whereFileId($fileId)
+            ->whereZone($zone)
+            ->delete();
+
         if (! $deleted) {
             return Response::json(['error' => true, 'message' => 'The file was not found.']);
         }

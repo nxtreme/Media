@@ -1,5 +1,9 @@
 <div class="form-group" data-image-zone="{{ $zone }}">
     <style>
+        .form-group .images-wrapper {
+            display: flex;
+            flex-direction: row;
+        }
         figure.jsThumbnailImageWrapper:not([hidden]) {
             position: relative;
             display: inline-block;
@@ -19,25 +23,35 @@
             border-radius: 20px;
             height: 25px;
         }
+        figure.jsThumbnailImageWrapper + figure.jsThumbnailImageWrapper {
+            margin-left: 15px;
+        }
     </style>
     <script>
         function {{ $zone }}_includeMedia(mediaId) {
+            $('#{{ sprintf("media__%s__id", $zone) }}').val(mediaId);
+            $('#{{ sprintf("media__%s__entity_class", $zone) }}').val('{{ $entityClass }}');
+            $('#{{ sprintf("media__%s__entity_id", $zone) }}').val('{{ isset($entityId) ? $entityId : null }}');
+
             $.ajax({
                 type: 'POST',
-                url: '{{ route('api.media.link') }}',
+                url: '{{ route('api.media.thumbnail_path') }}',
                 data: {
                     'mediaId': mediaId,
                     '_token': '{{ csrf_token() }}',
                     'entityClass': '{{ $entityClass }}',
-                    'entityId': '{{ $entityId }}',
+                    'entityId': '{{ isset($entityId) ? $entityId : null }}',
                     'zone': '{{ $zone }}'
                 },
                 success: function(data) {
-                    var html = '<img src="' + data.result.path + '" alt=""/>' +
-                            '<a class="jsRemoveLink" href="#" data-id="' + data.result.imageableId + '">' +
-                                '<i class="fa fa-times-circle"></i>' +
-                            '</a>';
-                    $('[data-image-zone="{{ $zone }}"] .jsThumbnailImageWrapper').append(html).fadeIn();
+                    $('#{{ sprintf("media__%s__path", $zone) }}').val(data.result.path);
+                    var html = '<figure class="jsThumbnailImageWrapper">' +
+                        '<img src="' + data.result.path + '" alt=""/>' +
+                        '<a class="jsRemoveImage" href="#" data-id="' + data.result.imageableId + '" data-image-zone="{{ $zone }}">' +
+                            '<i class="fa fa-times-circle"></i>' +
+                        '</a>' +
+                        '</figure>';
+                    $('[data-image-zone="{{ $zone }}"] .images-wrapper').append(html).fadeIn();
                 }
             });
         }
@@ -50,8 +64,14 @@
         {{ trans('media::media.Browse') }}
     </a>
 
+    {!! Form::hidden(sprintf('media[%s][id]', $zone), null, ['id' => sprintf('media__%s__id', $zone)]) !!}
+    {!! Form::hidden(sprintf('media[%s][entity_class]', $zone), null, ['id' => sprintf('media__%s__entity_class', $zone)]) !!}
+    {!! Form::hidden(sprintf('media[%s][entity_id]', $zone), null, ['id' => sprintf('media__%s__entity_id', $zone)]) !!}
+    {!! Form::hidden(sprintf('media[%s][path]', $zone), null, ['id' => sprintf('media__%s__path', $zone)]) !!}
+
     <div class="clearfix"></div>
 
+    <div class="images-wrapper">
     <figure class="jsThumbnailImageWrapper">
         <!-- <?php $zone ?> -->
         <?php if (isset(${$zone}->path)): ?>
@@ -61,9 +81,26 @@
             </a>
         <?php endif; ?>
     </figure>
+    </div>
 </div>
 <script>
     $( document ).ready(function() {
+        // Remove images that are not yet linked to the entity
+        $('body').on('click', '.jsRemoveImage', function(e) {
+            e.preventDefault();
+
+            // Clear the hidden input fields
+            var zone = $(this).data('image-zone');
+            $('#media__' + zone + '__id').val('');
+            $('#media__' + zone + '__entity_class').val('');
+            $('#media__' + zone + '__entity_id').val('');
+            $('#media__' + zone + '__path').val('');
+
+            // Remove the thumbnail image
+            var pictureWrapper = $(this).parent();
+            pictureWrapper.fadeOut().remove();
+        });
+        // Remove images that are linked to the entity
         $('[data-image-zone="{{$zone}}"]').on('click',  '.jsRemoveLink', function(e) {
             e.preventDefault();
             var imageableId = $(this).data('id');
