@@ -12,6 +12,7 @@
             padding: 3px;
             border-radius: 3px;
             margin-top: 20px;
+            margin-right: 15px;
         }
         figure.jsThumbnailImageWrapper i {
             position: absolute;
@@ -22,9 +23,6 @@
             background: white;
             border-radius: 20px;
             height: 25px;
-        }
-        figure.jsThumbnailImageWrapper + figure.jsThumbnailImageWrapper {
-            margin-left: 15px;
         }
     </style>
     <script>
