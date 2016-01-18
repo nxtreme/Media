@@ -34,10 +34,13 @@
         </div> {{-- end nav-tabs-custom --}}
     </div>
     <div class="col-md-4">
-        <img src="{{ $file->path }}" alt="" style="width: 100%;"/>
+        @if(strrpos($file->mimetype, 'image') !== false)
+            <img src="{{ $file->path }}" alt="" style="width: 100%;"/>
+        @endif
     </div>
 </div>
 
+@if(strrpos($file->mimetype, 'image') !== false)
 <div class="row">
     <div class="col-md-12">
         <h3>Thumbnails</h3>
@@ -52,6 +55,8 @@
         </ul>
     </div>
 </div>
+@endif
+
 {!! Form::close() !!}
 @stop
 
