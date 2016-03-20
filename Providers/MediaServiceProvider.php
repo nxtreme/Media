@@ -34,6 +34,10 @@ class MediaServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->publishes([
+            __DIR__ . '/../Assets/' => base_path('public/modules/Media/'),
+        ]);
+
         $this->registerMaxFolderSizeValidator();
     }
 
