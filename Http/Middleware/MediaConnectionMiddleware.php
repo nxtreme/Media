@@ -27,7 +27,7 @@ class MediaConnectionMiddleware {
 
         // ###### MAD HACK THAT NEEDS CHANGING HERE ###############
         // currently replacing 'artgallery' with 'content' as content as the current permission name which needs to change later
-        if ($connection === 'artgallery') {
+        if ($connection === 'artgallery' || $connection === 'mysql') {
             $permissionName = 'content';
         }
 
