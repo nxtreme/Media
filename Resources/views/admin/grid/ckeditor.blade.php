@@ -11,8 +11,9 @@
             }
 
             var funcNum = getUrlParam('CKEditorFuncNum');
+            var assetsDomain = "{{ rtrim(env('ASSET_DOMAIN'), '/') }}";
 
-            window.opener.CKEDITOR.tools.callFunction(funcNum, $(this).data('file'));
+            window.opener.CKEDITOR.tools.callFunction(funcNum, assetsDomain + $(this).data('file'));
             window.close();
         });
     });

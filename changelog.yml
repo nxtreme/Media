@@ -1,5 +1,24 @@
 url: https://github.com/AsgardCms/Media
 versions:
+    "1.11.0":
+        changed:
+            - Getting the correct field for the description input
+            - Naming the CkEditor route
+    "1.10.0":
+        added:
+            - Added Russian translations
+    "1.9.0":
+        added:
+            - Chinese Simplified language
+        changed:
+            - Setting default folder id to 0
+            - Fixed bug where thumbnails for images with uppercase extension wouldn't get created
+    "1.8.0":
+        added:
+            - Dutch and Portuguese language
+    "1.7.0":
+        added:
+            - Spanish translations
     "1.6.0":
         added:
             - Added Brazilian Portuguese translations

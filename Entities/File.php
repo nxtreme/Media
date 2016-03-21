@@ -22,4 +22,14 @@ class File extends Model
         'filesize',
         'folder_id',
     ];
+
+    /**
+     * Is this file an image?
+     *
+     * @return bollean
+     */
+    public function getIsImageAttribute()
+    {
+        return (boolean) preg_match('/^image\//i', $this->mimetype);
+    }
 }

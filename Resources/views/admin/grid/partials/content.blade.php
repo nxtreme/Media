@@ -56,11 +56,12 @@
                         <tr>
                             <td>{{ $file->id }}</td>
                             <td>
-                                <img src="{{ Imagy::getThumbnail($file->path, 'smallThumb') }}" alt=""/>
+                                @if ($file->isImage)<img src="{{ Imagy::getThumbnail($file->path, 'smallThumb') }}" alt=""/>@endif
                             </td>
                             <td>{{ $file->filename }}</td>
                             <td>
                                 <div class="btn-group">
+                                    @if ($file->isImage)
                                     <button type="button" class="btn btn-primary btn-flat dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         {{ trans('media::media.insert') }} <span class="caret"></span>
                                     </button>
@@ -76,6 +77,11 @@
                                             <a href="">Original</a>
                                         </li>
                                     </ul>
+                                    @else
+                                        <button type="button" class="btn btn-primary btn-flat jsInsertImage" data-file="{{ $file->path }}" data-id="{{ $file->id }}">
+                                            {{ trans('media::media.insert') }}
+                                        </button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -94,8 +100,8 @@
 <script src="{!! Module::asset('media:js/dropzone.js') !!}"></script>
 <?php $config = config('asgard.media.config'); ?>
 <script>
-    var maxFilesize = '<?php echo $config["max-file-size"] ?>',
-        acceptedFiles = '<?php echo $config["allowed-types"] ?>';
+    var maxFilesize = '<?php echo $config['max-file-size'] ?>',
+        acceptedFiles = '<?php echo $config['allowed-types'] ?>';
 </script>
 <script src="{!! Module::asset('media:js/init-dropzone.js') !!}"></script>
 <script>

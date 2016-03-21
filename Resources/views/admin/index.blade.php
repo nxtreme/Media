@@ -48,7 +48,9 @@
                             <?php foreach ($files as $file): ?>
                                 <tr>
                                     <td>
-                                        <img src="{{ Imagy::getThumbnail($file->path, 'smallThumb') }}" alt=""/>
+                                        @if(strrpos($file->mimetype, 'image') !== false)
+                                            <img src="{{ Imagy::getThumbnail($file->path, 'smallThumb') }}" alt=""/>
+                                        @endif
                                     </td>
                                     <td>
                                         <a href="{{ URL::route('admin.media.media.edit', [$file->id]) }}">
@@ -114,8 +116,8 @@
 <script src="{!! Module::asset('media:js/dropzone.js') !!}"></script>
 <?php $config = config('asgard.media.config'); ?>
 <script>
-    var maxFilesize = '<?php echo $config["max-file-size"] ?>',
-            acceptedFiles = '<?php echo $config["allowed-types"] ?>';
+    var maxFilesize = '<?php echo $config['max-file-size'] ?>',
+            acceptedFiles = '<?php echo $config['allowed-types'] ?>';
 </script>
 <script src="{!! Module::asset('media:js/init-dropzone.js') !!}"></script>
 

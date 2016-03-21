@@ -20,7 +20,7 @@
             <div class="tab-content">
                 <?php $i = 0; ?>
                 <?php foreach (LaravelLocalization::getSupportedLocales() as $locale => $language): ?>
-                    <?php $i++; ?>
+                    <?php ++$i; ?>
                     <div class="tab-pane {{ App::getLocale() == $locale ? 'active' : '' }}" id="tab_{{ $i }}">
                         @include('media::admin.partials.edit-fields', ['lang' => $locale])
                     </div>
@@ -34,10 +34,13 @@
         </div> {{-- end nav-tabs-custom --}}
     </div>
     <div class="col-md-4">
-        <img src="{{ $file->path }}" alt="" style="width: 100%;"/>
+        @if(strrpos($file->mimetype, 'image') !== false)
+            <img src="{{ $file->path }}" alt="" style="width: 100%;"/>
+        @endif
     </div>
 </div>
 
+@if(strrpos($file->mimetype, 'image') !== false)
 <div class="row">
     <div class="col-md-12">
         <h3>Thumbnails</h3>
@@ -52,5 +55,31 @@
         </ul>
     </div>
 </div>
+@endif
+
 {!! Form::close() !!}
+@stop
+
+
+@section('footer')
+    <a data-toggle="modal" data-target="#keyboardShortcutsModal"><i class="fa fa-keyboard-o"></i></a> &nbsp;
+@stop
+
+@section('shortcuts')
+    <dl class="dl-horizontal">
+        <dt><code>b</code></dt>
+        <dd>{{ trans('core::core.back to index', ['name' => 'media']) }}</dd>
+    </dl>
+@stop
+
+@section('scripts')
+    <script>
+        $( document ).ready(function() {
+            $(document).keypressAction({
+                actions: [
+                    { key: 'b', route: "<?= route('admin.media.media.index') ?>" }
+                ]
+            });
+        });
+    </script>
 @stop

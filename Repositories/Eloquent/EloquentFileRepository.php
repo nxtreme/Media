@@ -39,6 +39,27 @@ class EloquentFileRepository extends EloquentBaseRepository implements FileRepos
     }
 
     /**
+     * If a method does not exist on the repository
+     * try it directly on the model.
+     * THis is mostly because I need the where() method
+     *
+     * @param  string $method
+     * @param  array $args
+     *
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+        // try call the method locally first
+        if (method_exists($this, $method)) {
+            return $this->$method(expand($args));
+        }
+
+        // then try calling the method on the model
+        return call_user_func_array([$this->model, $method], $args);
+    }
+
+    /**
      * Update a resource
      * @param  File  $file
      * @param $data
@@ -67,10 +88,11 @@ class EloquentFileRepository extends EloquentBaseRepository implements FileRepos
         }
 
         $this->model->filename = $fileName;
-        $this->model->path = '/assets/media/' . $fileName;
+        $this->model->path = config('asgard.media.config.files-path') . "{$fileName}";
         $this->model->extension = $file->guessClientExtension();
         $this->model->mimetype = $file->getClientMimeType();
         $this->model->filesize = $file->getFileInfo()->getSize();
+        $this->model->folder_id = 0;
         $this->model->save();
 
         return $this->model;

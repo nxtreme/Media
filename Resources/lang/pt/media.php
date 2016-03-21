@@ -2,11 +2,11 @@
 
 return [
     'title' => [
-        'media' => 'Mídia',
-        'edit media' => 'Editar mídia',
+        'media' => 'Media',
+        'edit media' => 'Editar media',
     ],
     'breadcrumb' => [
-        'media' => 'Mídia',
+        'media' => 'Media',
     ],
     'table' => [
         'filename' => 'Arquivo',
@@ -16,10 +16,10 @@ return [
     'form' => [
         'alt_attribute' => 'Nome alternativo',
         'description' => 'Descrição',
-        'keywords' => 'Palavras chaves',
+        'keywords' => 'Palavras chave',
     ],
     'validation' => [
-        'max_size' => 'A pasta de mídia está cheia. Tamanho máximo (:size).',
+        'max_size' => 'A pasta de media atingiu o tamanho máximo (:size).',
     ],
     'file-sizes' => [
         'B' => 'Bytes',
@@ -30,6 +30,6 @@ return [
     ],
     'choose file' => 'Selecione um arquivo',
     'insert' => 'Inserir este arquivo',
-    'file picker' => 'Seletor de arquivo',
+    'file picker' => 'Selecionador de arquivo',
     'Browse' => 'Procurar ...',
 ];
