@@ -1,5 +1,6 @@
 <?php namespace Modules\Media\Providers;
 
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Modules\Media\Console\RefreshThumbnailCommand;
@@ -39,6 +40,19 @@ class MediaServiceProvider extends ServiceProvider
         ]);
 
         $this->registerMaxFolderSizeValidator();
+        $this->registerMiddleware($this->app['router']);
+    }
+
+    /**
+     * Register the filters.
+     *
+     * @param  Router $router
+     * @return void
+     */
+    public function registerMiddleware(Router $router)
+    {
+        $class = "Modules\\Media\\Http\\Middleware\\MediaConnectionMiddleware";
+        $router->middleware('media.connection', $class);
     }
 
     /**
