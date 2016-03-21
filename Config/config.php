@@ -31,8 +31,8 @@ return [
     'max-total-size' => 1000000000,
 
     'website-connections' => [
-        'aucklandlive',
         'artgallery',
+        'aucklandlive',
         'mysql', // <--- This needs to be later removed as its there to save any breaking changes for other project
     ],
 ];
