@@ -1,6 +1,8 @@
 <?php namespace Modules\Media\Repositories\Eloquent;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 use Modules\Core\Repositories\Eloquent\EloquentBaseRepository;
 use Modules\Media\Entities\File;
 use Modules\Media\Helpers\FileHelper;
@@ -9,6 +11,32 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class EloquentFileRepository extends EloquentBaseRepository implements FileRepository
 {
+
+    /**
+     * @param Model $model
+     */
+    public function __construct($model)
+    {
+        parent::__construct($model);
+        $connection = Request::input('connection');
+        if (isset(Config('database.connections')[$connection]) === true) {
+            $this->model->setConnection($connection);
+        }
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function all()
+    {
+
+        if (method_exists($this->model, 'translations')) {
+            $results = $this->model->orderBy('created_at', 'DESC')->get();
+            $results->load('translations');
+            return $results;
+        }
+        return $this->model->orderBy('created_at', 'DESC')->get();
+    }
 
     /**
      * If a method does not exist on the repository
@@ -53,20 +81,21 @@ class EloquentFileRepository extends EloquentBaseRepository implements FileRepos
     {
         $fileName = FileHelper::slug($file->getClientOriginalName());
 
-        $exists = $this->model->whereFilename($fileName)->first();
+        $exists = $this->model->where('filename', $fileName)->first();
 
-        if ($exists) {
+        if (is_null($exists) !== true) {
             throw new \InvalidArgumentException('File slug already exists');
         }
 
-        return $this->model->create([
-            'filename' => $fileName,
-            'path' => config('asgard.media.config.files-path') . "{$fileName}",
-            'extension' => $file->guessClientExtension(),
-            'mimetype' => $file->getClientMimeType(),
-            'filesize' => $file->getFileInfo()->getSize(),
-            'folder_id' => 0,
-        ]);
+        $this->model->filename = $fileName;
+        $this->model->path = config('asgard.media.config.files-path') . "{$fileName}";
+        $this->model->extension = $file->guessClientExtension();
+        $this->model->mimetype = $file->getClientMimeType();
+        $this->model->filesize = $file->getFileInfo()->getSize();
+        $this->model->folder_id = 0;
+        $this->model->save();
+
+        return $this->model;
     }
 
     public function destroy($file)

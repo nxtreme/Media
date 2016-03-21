@@ -4,7 +4,7 @@ $router->bind('media', function ($id) {
     return app(\Modules\Media\Repositories\FileRepository::class)->find($id);
 });
 
-$router->group(['prefix' => '/media'], function () {
+$router->group(['prefix' => '/media', 'middleware' => 'media.connection'], function () {
     get('media', ['as' => 'admin.media.media.index', 'uses' => 'MediaController@index']);
     get('media/create', ['as' => 'admin.media.media.create', 'uses' => 'MediaController@create']);
     post('media', ['as' => 'admin.media.media.store', 'uses' => 'MediaController@store']);
