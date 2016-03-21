@@ -54,7 +54,7 @@
     {!! Form::label($zone, ucfirst($zone) . ':') !!}
     <div class="clearfix"></div>
     <?php $url = route('media.grid.select') ?>
-    <a class="btn btn-primary btn-upload" onclick="window.open('{!! $url !!}', '_blank', 'menubar=no,status=no,toolbar=no,scrollbars=yes,height=500,width=1000');"><i class="fa fa-upload"></i>
+    <a class="btn btn-primary btn-upload" onclick="window.open('{!! $url . '?connection=' . $connection !!}', '_blank', 'menubar=no,status=no,toolbar=no,scrollbars=yes,height=500,width=1000');"><i class="fa fa-upload"></i>
         {{ trans('media::media.Browse') }}
     </a>
     <div class="clearfix"></div>

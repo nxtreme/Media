@@ -28,4 +28,9 @@ return [
     | Expressed in bytes
     */
     'max-total-size' => 1000000000,
+
+    'website-connections' => [
+        'aucklandlive',
+        'artgallery',
+    ],
 ];
