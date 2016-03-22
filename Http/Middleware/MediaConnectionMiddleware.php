@@ -31,17 +31,17 @@ class MediaConnectionMiddleware {
             $permissionName = 'content';
         }
 
-        if (in_array($connection, $websiteConnections) === false) {
+        if (isset($websiteConnections[$connection]) === false) {
             // Since no connection was specific lets see if we can default to one instead.
-            foreach ($websiteConnections as $websitesConnections ) {
-                if ($this->auth->hasAccess($websitesConnections . '.index') === true) {
-                    return redirect($request->url() . '?connection=' . $websitesConnections);
+            foreach ($websiteConnections as $websitesConnection => $connectionInfo) {
+                if ($this->auth->hasAccess($connectionInfo['permission'] . '.index') === true) {
+                    return redirect($request->url() . '?connection=' . $websitesConnection);
                 }
             }
             return abort(403);
         } else {
             // check if user has access to the connection with the use of the module
-            if ($this->auth->hasAccess($permissionName . '.index') !== true) {
+            if ($this->auth->hasAccess($websiteConnections[$connection]['permission'] . '.index') !== true) {
                 return abort(403);
             }
         }

@@ -4,6 +4,15 @@
 <h1>
     {{ trans('media::media.title.media') }}
 </h1>
+
+@if(count($connectionPermissions['connections']) > 1)
+    <select name="media-webiste" id="media-webiste" class="form-control input-sm">
+        @foreach($connectionPermissions['connections'] as $connectionName => $connectionInfo)
+            <option value="{{ $connectionName }}" {{ $connectionPermissions['current'] == $connectionName ? 'selected' : '' }}>{{ $connectionInfo['name'] }}</option>
+        @endforeach
+    </select>
+@endif
+
 <ol class="breadcrumb">
     <li><a href="{{ URL::route('dashboard.index') }}"><i class="fa fa-dashboard"></i> {{ trans('core::core.breadcrumb.home') }}</a></li>
     <li><i class="fa fa-camera"></i> {{ trans('media::media.breadcrumb.media') }}</li>
@@ -114,6 +123,7 @@
 
 @section('scripts')
 <script src="{!! Module::asset('media:js/dropzone.js') !!}"></script>
+<script src="{!! Module::asset('media:js/connection-switcher.js') !!}"></script>
 <?php $config = config('asgard.media.config'); ?>
 <script>
     var maxFilesize = '<?php echo $config['max-file-size'] ?>',

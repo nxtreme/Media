@@ -31,8 +31,17 @@ return [
     'max-total-size' => 1000000000,
 
     'website-connections' => [
-        'aucklandlive',
-        'artgallery',
-        'mysql', // <--- This needs to be later removed as its there to save any breaking changes for other project
+        'artgallery' => [
+                'name' => 'Art Gallery',
+                'permission' => 'content',
+            ],
+        'aucklandlive' => [
+                'name' => 'Auckland Live',
+                'permission' => 'aucklandlive',
+            ],
+        'mysql' => [ // <--- This needs to be later removed as its there to save any breaking changes for other project
+                'name' => 'Art Gallery (Backwards Compatible)',
+                'permission' => 'content',
+            ],
     ],
 ];

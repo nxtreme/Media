@@ -7,6 +7,7 @@ use Modules\Media\Http\Requests\UpdateMediaRequest;
 use Modules\Media\Image\Imagy;
 use Modules\Media\Image\ThumbnailsManager;
 use Modules\Media\Repositories\FileRepository;
+use Modules\Media\Services\PermissionServices;
 
 class MediaController extends AdminBaseController
 {
@@ -41,13 +42,15 @@ class MediaController extends AdminBaseController
      *
      * @return Response
      */
-    public function index()
+    public function index(PermissionServices $permissionServices)
     {
         $files = $this->file->all();
 
         $config = $this->config->get('asgard.media.config');
 
-        return view('media::admin.index', compact('files', 'config'));
+        $connectionPermissions = $permissionServices->getPermittedConnections();
+
+        return view('media::admin.index', compact('files', 'config', 'connectionPermissions'));
     }
 
     /**
