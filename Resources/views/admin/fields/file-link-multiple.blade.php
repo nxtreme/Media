@@ -32,6 +32,7 @@
                 type: 'POST',
                 url: '{{ route('api.media.thumbnail_path') }}',
                 data: {
+                    'connection': '{{ $connection }}',
                     'mediaId': mediaId,
                     '_token': '{{ csrf_token() }}',
                     'entityClass': '{{ $entityClass }}',

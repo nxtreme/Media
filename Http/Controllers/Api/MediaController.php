@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-use Modules\Media\Entities\File;
 use Modules\Media\Events\FileWasLinked;
 use Modules\Media\Events\FileWasUnlinked;
 use Modules\Media\Events\FileWasUploaded;
@@ -55,8 +54,7 @@ class MediaController extends Controller
      */
     public function show(Request $request, $file)
     {
-        $mediaId = $request->get('mediaId');
-        return File::findOrFail($file);
+        return $this->file->findOrFail($file);
     }
 
     /**
