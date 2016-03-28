@@ -4,7 +4,8 @@
         $('.jsInsertImage').on('click', function (e) {
             e.preventDefault();
             var mediaId = $(this).data('id');
-            window.opener.{{$zone}}_includeMedia(mediaId);
+            var connection = queryString.connection;
+            window.opener.{{$zone}}_includeMedia(mediaId + '?connection=' + connection);
             window.close();
         });
     });
