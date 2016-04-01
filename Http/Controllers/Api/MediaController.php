@@ -66,7 +66,7 @@ class MediaController extends Controller
     {
         $mediaId = $request->get('mediaId');
 
-        $file = DB::table('media__files')->whereId($mediaId)->first();
+        $file = $this->file->whereId($mediaId)->first();
         $thumbnailPath = $this->imagy->getThumbnail($file->path, 'mediumThumb');
 
         return Response::json([
