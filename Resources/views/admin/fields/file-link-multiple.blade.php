@@ -100,6 +100,7 @@
                 type: 'POST',
                 url: '{{ route('api.media.unlink-multi') }}',
                 data: {
+                    'connection': '{{ $connection }}',
                     'imageableId': '{{ $entityId }}',
                     'fileId': fileId,
                     'zone': '{{ $zone }}',

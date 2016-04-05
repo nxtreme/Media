@@ -108,6 +108,7 @@
                 type: 'POST',
                 url: '{{ route('api.media.unlink') }}',
                 data: {
+                    'connection': '{{ $connection }}',
                     'imageableId': imageableId,
                     '_token': '{{ csrf_token() }}'
                 },

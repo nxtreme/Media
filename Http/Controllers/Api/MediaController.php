@@ -102,11 +102,12 @@ class MediaController extends Controller
         $mediaId = $request->get('mediaId');
         $entityClass = $request->get('entityClass');
         $entityId = $request->get('entityId');
+        $connection = $request->get('connection');
 
         $entity = $entityClass::find($entityId);
         $zone = $request->get('zone');
         $entity->files()->attach($mediaId, ['imageable_type' => $entityClass, 'zone' => $zone]);
-        $imageable = DB::table('media__imageables')->whereFileId($mediaId)->whereZone($zone)->whereImageableType($entityClass)->first();
+        $imageable = DB::connection($connection)->table('media__imageables')->whereFileId($mediaId)->whereZone($zone)->whereImageableType($entityClass)->first();
         $file = $this->file->find($imageable->file_id);
 
         $thumbnailPath = $this->imagy->getThumbnail($file->path, 'mediumThumb');
@@ -128,7 +129,9 @@ class MediaController extends Controller
     public function unlinkMedia(Request $request)
     {
         $imageableId = $request->get('imageableId');
-        $deleted = DB::table('media__imageables')->whereId($imageableId)->delete();
+        $connection = $request->get('connection');
+
+        $deleted = DB::connection($connection)->table('media__imageables')->whereId($imageableId)->delete();
         if (! $deleted) {
             return Response::json(['error' => true, 'message' => 'The file was not found.']);
         }
@@ -149,8 +152,9 @@ class MediaController extends Controller
         $imageableId = $request->get('imageableId');
         $fileId = $request->get('fileId');
         $zone = $request->get('zone');
+        $connection = $request->get('connection');
 
-        $deleted = DB::table('media__imageables')
+        $deleted = DB::connection($connection)->table('media__imageables')
             ->whereImageableId($imageableId)
             ->whereFileId($fileId)
             ->whereZone($zone)
