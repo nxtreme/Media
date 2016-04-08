@@ -1,6 +1,7 @@
 <?php namespace Modules\Media\Http\Controllers\Admin;
 
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Http\Request;
 use Modules\Core\Http\Controllers\Admin\AdminBaseController;
 use Modules\Media\Entities\File;
 use Modules\Media\Http\Requests\UpdateMediaRequest;
@@ -42,15 +43,16 @@ class MediaController extends AdminBaseController
      *
      * @return Response
      */
-    public function index(PermissionServices $permissionServices)
+    public function index(Request $request, PermissionServices $permissionServices)
     {
         $files = $this->file->all();
 
         $config = $this->config->get('asgard.media.config');
 
         $connectionPermissions = $permissionServices->getPermittedConnections();
+        $connection = $request->get('connection');
 
-        return view('media::admin.index', compact('files', 'config', 'connectionPermissions'));
+        return view('media::admin.index', compact('files', 'config', 'connectionPermissions', 'connection'));
     }
 
     /**
@@ -99,13 +101,13 @@ class MediaController extends AdminBaseController
      * @internal param int $id
      * @return Response
      */
-    public function destroy(File $file)
+    public function destroy(Request $request, File $file)
     {
         $this->imagy->deleteAllFor($file);
         $this->file->destroy($file);
 
         flash(trans('media::messages.file deleted'));
 
-        return redirect()->route('admin.media.media.index');
+        return redirect()->route('admin.media.media.index', ['connection' => $request->input('connection')]);
     }
 }
