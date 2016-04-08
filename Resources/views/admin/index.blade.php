@@ -111,6 +111,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline btn-flat" data-dismiss="modal">{{ trans('core::core.button.cancel') }}</button>
                     {!! Form::open(['route' => ['admin.media.media.destroy', $file->id], 'method' => 'delete', 'class' => 'pull-left']) !!}
+                        <input type="hidden" name="connection" value="{{ $connection }}">
                         <button type="submit" class="btn btn-outline btn-flat"><i class="glyphicon glyphicon-trash"></i> {{ trans('core::core.button.delete') }}</button>
                     {!! Form::close() !!}
                 </div>

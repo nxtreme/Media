@@ -2,6 +2,7 @@
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 
 class File extends Model
 {
@@ -22,6 +23,18 @@ class File extends Model
         'filesize',
         'folder_id',
     ];
+
+    /**
+     * @param Model $model
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $connection = Request::input('connection');
+        if (isset(Config('database.connections')[$connection]) === true) {
+            $this->setConnection($connection);
+        }
+    }
 
     /**
      * Is this file an image?
