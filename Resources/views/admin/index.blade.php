@@ -62,18 +62,18 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ URL::route('admin.media.media.edit', [$file->id]) }}">
+                                        <a href="{{ URL::route('admin.media.media.edit', [$file->id]) }}?connection={{ $connection }}">
                                             {{ $file->filename }}
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="{{ URL::route('admin.media.media.edit', [$file->id]) }}">
+                                        <a href="{{ URL::route('admin.media.media.edit', [$file->id]) }}?connection={{ $connection }}">
                                             {{ $file->created_at }}
                                         </a>
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <a href="{{ URL::route('admin.media.media.edit', [$file->id]) }}" class="btn btn-default btn-flat"><i class="glyphicon glyphicon-pencil"></i></a>
+                                            <a href="{{ URL::route('admin.media.media.edit', [$file->id]) }}?connection={{ $connection }}" class="btn btn-default btn-flat"><i class="glyphicon glyphicon-pencil"></i></a>
                                             <button class="btn btn-danger btn-flat" data-toggle="modal" data-target="#confirmation-{{ $file->id }}"><i class="glyphicon glyphicon-trash"></i></button>
                                         </div>
                                     </td>
