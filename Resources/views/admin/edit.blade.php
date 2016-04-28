@@ -13,6 +13,7 @@
 
 @section('content')
 {!! Form::open(['route' => ['admin.media.media.update', $file->id], 'method' => 'put']) !!}
+<input type="hidden" name="connection" value="{{ $connection }}">
 <div class="row">
     <div class="col-md-8">
         <div class="nav-tabs-custom">

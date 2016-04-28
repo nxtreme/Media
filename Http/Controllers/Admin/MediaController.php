@@ -71,11 +71,12 @@ class MediaController extends AdminBaseController
      * @param  File     $file
      * @return Response
      */
-    public function edit(File $file)
+    public function edit(Request $request, File $file)
     {
         $thumbnails = $this->thumbnailsManager->all();
+        $connection = $request->input('connection');
 
-        return view('media::admin.edit', compact('file', 'thumbnails'));
+        return view('media::admin.edit', compact('file', 'thumbnails', 'connection'));
     }
 
     /**
