@@ -21,8 +21,8 @@ trait MediaRelation
     {
         $files = $this->files;
 
-        $filtered = $files->filter(function ($file) {
-            return $file->pivot->zone === 'mainImage';
+        $filtered = $files->filter(function ($file) use ($zone) {
+            return $file->pivot->zone === $zone;
         });
 
         return $filtered;
